@@ -1,0 +1,7 @@
+Detector Type, Average Min Size, Average Max Size, Average Mean Size, Average StdDev Size, Average Keypoints Per Image, Time Taken (ms)
+SHITOMASI,4,4,4,0,117.9,16.5465
+HARRIS,6,6,6,0,24.8,17.8342
+FAST,7,7,7,0,149.1,1.80177
+BRISK,8.4,72,21.9444,14.6021,276.2,53.1737
+ORB,31,111.079,55.9928,25.0951,116.1,138.676
+AKAZE,4.8,23.2648,7.69915,3.53461,167,49.6229
