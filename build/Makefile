@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mpdscamp/Documents/SFND_2D_Feature_Tracking
+CMAKE_SOURCE_DIR = /home/mpdscamp/Documents/Camera_2D_Feature_Tracking
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build
+CMAKE_BINARY_DIR = /home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build/CMakeFiles /home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build/CMakeFiles /home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -123,33 +123,6 @@ depend:
 	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/build
 .PHONY : 2D_feature_tracking/fast
 
-src/MidTermProject_Camera_Student.o: src/MidTermProject_Camera_Student.cpp.o
-
-.PHONY : src/MidTermProject_Camera_Student.o
-
-# target to build an object file
-src/MidTermProject_Camera_Student.cpp.o:
-	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/MidTermProject_Camera_Student.cpp.o
-.PHONY : src/MidTermProject_Camera_Student.cpp.o
-
-src/MidTermProject_Camera_Student.i: src/MidTermProject_Camera_Student.cpp.i
-
-.PHONY : src/MidTermProject_Camera_Student.i
-
-# target to preprocess a source file
-src/MidTermProject_Camera_Student.cpp.i:
-	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/MidTermProject_Camera_Student.cpp.i
-.PHONY : src/MidTermProject_Camera_Student.cpp.i
-
-src/MidTermProject_Camera_Student.s: src/MidTermProject_Camera_Student.cpp.s
-
-.PHONY : src/MidTermProject_Camera_Student.s
-
-# target to generate assembly for a file
-src/MidTermProject_Camera_Student.cpp.s:
-	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/MidTermProject_Camera_Student.cpp.s
-.PHONY : src/MidTermProject_Camera_Student.cpp.s
-
 src/matching2D.o: src/matching2D.cpp.o
 
 .PHONY : src/matching2D.o
@@ -176,6 +149,33 @@ src/matching2D.s: src/matching2D.cpp.s
 src/matching2D.cpp.s:
 	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/matching2D.cpp.s
 .PHONY : src/matching2D.cpp.s
+
+src/project.o: src/project.cpp.o
+
+.PHONY : src/project.o
+
+# target to build an object file
+src/project.cpp.o:
+	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/project.cpp.o
+.PHONY : src/project.cpp.o
+
+src/project.i: src/project.cpp.i
+
+.PHONY : src/project.i
+
+# target to preprocess a source file
+src/project.cpp.i:
+	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/project.cpp.i
+.PHONY : src/project.cpp.i
+
+src/project.s: src/project.cpp.s
+
+.PHONY : src/project.s
+
+# target to generate assembly for a file
+src/project.cpp.s:
+	$(MAKE) -f CMakeFiles/2D_feature_tracking.dir/build.make CMakeFiles/2D_feature_tracking.dir/src/project.cpp.s
+.PHONY : src/project.cpp.s
 
 src/utils.o: src/utils.cpp.o
 
@@ -213,12 +213,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... 2D_feature_tracking"
-	@echo "... src/MidTermProject_Camera_Student.o"
-	@echo "... src/MidTermProject_Camera_Student.i"
-	@echo "... src/MidTermProject_Camera_Student.s"
 	@echo "... src/matching2D.o"
 	@echo "... src/matching2D.i"
 	@echo "... src/matching2D.s"
+	@echo "... src/project.o"
+	@echo "... src/project.i"
+	@echo "... src/project.s"
 	@echo "... src/utils.o"
 	@echo "... src/utils.i"
 	@echo "... src/utils.s"

@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/mpdscamp/Documents/SFND_2D_Feature_Tracking/src/MidTermProject_Camera_Student.cpp" "/home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build/CMakeFiles/2D_feature_tracking.dir/src/MidTermProject_Camera_Student.cpp.o"
-  "/home/mpdscamp/Documents/SFND_2D_Feature_Tracking/src/matching2D.cpp" "/home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build/CMakeFiles/2D_feature_tracking.dir/src/matching2D.cpp.o"
-  "/home/mpdscamp/Documents/SFND_2D_Feature_Tracking/src/utils.cpp" "/home/mpdscamp/Documents/SFND_2D_Feature_Tracking/build/CMakeFiles/2D_feature_tracking.dir/src/utils.cpp.o"
+  "/home/mpdscamp/Documents/Camera_2D_Feature_Tracking/src/matching2D.cpp" "/home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build/CMakeFiles/2D_feature_tracking.dir/src/matching2D.cpp.o"
+  "/home/mpdscamp/Documents/Camera_2D_Feature_Tracking/src/project.cpp" "/home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build/CMakeFiles/2D_feature_tracking.dir/src/project.cpp.o"
+  "/home/mpdscamp/Documents/Camera_2D_Feature_Tracking/src/utils.cpp" "/home/mpdscamp/Documents/Camera_2D_Feature_Tracking/build/CMakeFiles/2D_feature_tracking.dir/src/utils.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
