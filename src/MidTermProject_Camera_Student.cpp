@@ -15,6 +15,7 @@
 
 #include "dataStructures.h"
 #include "matching2D.hpp"
+#include "utils.hpp"
 
 using namespace std;
 
@@ -39,8 +40,19 @@ int main(int argc, const char *argv[])
     int dataBufferSize = 2;       // no. of images which are held in memory (ring buffer) at the same time
     vector<DataFrame> dataBuffer; // list of data frames which are held in memory at the same time
     bool bVis = false;            // visualize results
-
+    std::vector<string> detectorList = {"SHITOMASI", "HARRIS", "FAST", "BRISK", "ORB", "AKAZE", "SIFT"};
+    string detectorType = detectorList[0]; // 0 - SHITOMASI, 1 - HARRIS, 2 - FAST, 3 - BRISK, 4 - ORB, 5 - AKAZE, 6 - SIFT
+    std::vector<string> descriptorList = {"BRISK", "BRIEF", "ORB", "FREAK", "AKAZE", "SIFT"};
+    string descriptorType = descriptorList[0]; // 0 - BRISK, 1 - BRIEF, 2 - ORB, 3 - FREAK, 4 - AKAZE, 5 - SIFT
+    
     /* MAIN LOOP OVER ALL IMAGES */
+
+    // Define statistics measurements
+    double totalMinSize = 0, totalMaxSize = 0, totalSumSize = 0, totalVarianceSum = 0;
+    int totalKeypoints = 0;
+    double detectorTime = 0.0f; // Time measurement
+    double descriptorTime = 0.0f; // Time measurement
+    double avgMatches = 0.0f; // Total matches
 
     for (size_t imgIndex = 0; imgIndex <= imgEndIndex - imgStartIndex; imgIndex++)
     {
@@ -60,6 +72,10 @@ int main(int argc, const char *argv[])
         //// TASK MP.1 -> replace the following code with ring buffer of size dataBufferSize
 
         // push image into data frame buffer
+        if (dataBuffer.size() >= dataBufferSize)
+        {
+            dataBuffer.erase(dataBuffer.begin());
+        }
         DataFrame frame;
         frame.cameraImg = imgGray;
         dataBuffer.push_back(frame);
@@ -71,19 +87,70 @@ int main(int argc, const char *argv[])
 
         // extract 2D keypoints from current image
         vector<cv::KeyPoint> keypoints; // create empty feature list for current image
-        string detectorType = "SHITOMASI";
+        
 
         //// STUDENT ASSIGNMENT
         //// TASK MP.2 -> add the following keypoint detectors in file matching2D.cpp and enable string-based selection based on detectorType
         //// -> HARRIS, FAST, BRISK, ORB, AKAZE, SIFT
-
         if (detectorType.compare("SHITOMASI") == 0)
         {
+            double tempDetectorTime = (double)cv::getTickCount();
             detKeypointsShiTomasi(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
+        }
+        else if (detectorType.compare("HARRIS") == 0)
+        {
+            double tempDetectorTime = (double)cv::getTickCount();
+            detKeypointsHarris(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
+        }
+        else if (detectorType.compare("FAST") == 0)
+        {
+            double tempDetectorTime = (double)cv::getTickCount();
+            detKeypointsFast(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
+        }
+        else if (detectorType.compare("BRISK") == 0)
+        {
+            double tempDetectorTime = (double)cv::getTickCount();
+            detKeypointsBrisk(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
+        }
+        else if (detectorType.compare("ORB") == 0)
+        {
+            double tempDetectorTime = (double)cv::getTickCount();
+            detKeypointsOrb(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
+        }
+        else if (detectorType.compare("AKAZE") == 0)
+        {
+            double tempDetectorTime = (double)cv::getTickCount();
+            detKeypointsAkaze(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
+        }
+        else if (detectorType.compare("SIFT") == 0)
+        {
+            double tempDetectorTime = (double)cv::getTickCount();
+            detKeypointsSift(keypoints, imgGray, false);
+            tempDetectorTime = ((double)cv::getTickCount() - tempDetectorTime) / cv::getTickFrequency();
+
+            detectorTime += tempDetectorTime;
         }
         else
         {
-            //...
+            throw std::runtime_error("Unsupported detector type: " + detectorType);
         }
         //// EOF STUDENT ASSIGNMENT
 
@@ -95,8 +162,41 @@ int main(int argc, const char *argv[])
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
-            // ...
+            for (auto it = keypoints.begin(); it != keypoints.end();)
+            {
+                if (!vehicleRect.contains(it->pt))
+                {
+                    it = keypoints.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
         }
+
+        // Statistics calculations
+        double minSize = std::numeric_limits<double>::max(), maxSize = 0, sumSize = 0;
+        for (const auto& kp : keypoints) {
+            double kpSize = kp.size;
+            minSize = std::min(minSize, kpSize);
+            maxSize = std::max(maxSize, kpSize);
+            sumSize += kpSize;
+        }
+        double meanSize = keypoints.empty() ? 0 : sumSize / keypoints.size();
+
+        double varianceSum = 0;
+        for (const auto& kp : keypoints) {
+            varianceSum += std::pow(kp.size - meanSize, 2);
+        }
+        double stdDevSize = keypoints.empty() ? 0 : std::sqrt(varianceSum / keypoints.size());
+
+        // Update accumulators
+        totalMinSize += minSize;
+        totalMaxSize += maxSize;
+        totalSumSize += sumSize;
+        totalVarianceSum += varianceSum;
+        totalKeypoints += keypoints.size();
 
         //// EOF STUDENT ASSIGNMENT
 
@@ -125,8 +225,10 @@ int main(int argc, const char *argv[])
         //// -> BRIEF, ORB, FREAK, AKAZE, SIFT
 
         cv::Mat descriptors;
-        string descriptorType = "BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
+        double t = (double)cv::getTickCount();
         descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, descriptorType);
+        t = ((double)cv::getTickCount() - t) / cv::getTickFrequency();
+        descriptorTime += t;
         //// EOF STUDENT ASSIGNMENT
 
         // push descriptors for current frame to end of data buffer
@@ -142,7 +244,7 @@ int main(int argc, const char *argv[])
             vector<cv::DMatch> matches;
             string matcherType = "MAT_BF";        // MAT_BF, MAT_FLANN
             string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
-            string selectorType = "SEL_NN";       // SEL_NN, SEL_KNN
+            string selectorType = "SEL_KNN";       // SEL_NN, SEL_KNN
 
             //// STUDENT ASSIGNMENT
             //// TASK MP.5 -> add FLANN matching in file matching2D.cpp
@@ -156,6 +258,7 @@ int main(int argc, const char *argv[])
 
             // store matches in current data frame
             (dataBuffer.end() - 1)->kptMatches = matches;
+            avgMatches += matches.size();
 
             cout << "#4 : MATCH KEYPOINT DESCRIPTORS done" << endl;
 
@@ -180,6 +283,25 @@ int main(int argc, const char *argv[])
         }
 
     } // eof loop over all images
+
+    // Calculate keypoint statistics
+    double avgMinSize = totalMinSize / (imgEndIndex - imgStartIndex + 1);
+    double avgMaxSize = totalMaxSize / (imgEndIndex - imgStartIndex + 1);
+    double avgMeanSize = totalSumSize / (totalKeypoints ? totalKeypoints : 1);
+    double avgStdDevSize = std::sqrt(totalVarianceSum / (totalKeypoints ? totalKeypoints : 1));
+    double avgKeypointsPerImage = static_cast<double>(totalKeypoints) / (imgEndIndex - imgStartIndex + 1);
+    detectorTime /= (imgEndIndex - imgStartIndex + 1);
+    descriptorTime /= (imgEndIndex - imgStartIndex + 1);
+
+    // Calculate match statistics
+    double avgMatchPercentage = avgMatches / totalKeypoints * 100.0f;
+    avgMatches /= (imgEndIndex - imgStartIndex + 1);
+
+    // Write keypoint-detector statistics to a file
+    printKeypointStatistics(detectorType, avgMinSize, avgMaxSize, avgMeanSize, avgStdDevSize, avgKeypointsPerImage, detectorTime);
+
+    // Write keypoint matches statistics to a file
+    printMatchStatistics(detectorType, descriptorType, avgMatches, avgMatchPercentage, detectorTime, descriptorTime);
 
     return 0;
 }
